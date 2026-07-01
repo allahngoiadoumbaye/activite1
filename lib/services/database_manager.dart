@@ -1,4 +1,4 @@
-// ignore: uri_does_not_exist, depend_on_referenced_packages
+// Ce fichier gère la base de données SQLite pour l'application Flutter
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:path/path.dart';
 import '../modele/redacteur.dart'; // Importation de ton modèle
@@ -41,18 +41,14 @@ class DatabaseManager {
     ''');
   }
 
-  // ==========================================
-  // LES FONCTIONNALITÉS DU CRUD
-  // ==========================================
-
-  // 1. CREATE : Insérer un nouveau rédacteur
+  //  Insérer un nouveau rédacteur
   Future<int> insertRedacteur(Redacteur redacteur) async {
     final db = await instance.database;
     // On convertit l'objet Redacteur en Map pour SQLite
     return await db.insert('redacteurs', redacteur.toMap());
   }
 
-  // 2. READ : Récupérer la liste complète des rédacteurs
+  // Récupérer la liste complète des rédacteurs
   Future<List<Redacteur>> getAllRedacteurs() async {
     final db = await instance.database;
     // On récupère toutes les lignes de la table sous forme de List<Map>
@@ -62,18 +58,18 @@ class DatabaseManager {
     return result.map((json) => Redacteur.fromMap(json)).toList();
   }
 
-  // 3. UPDATE : Modifier les informations d'un rédacteur
+  // Modifier les informations d'un rédacteur
   Future<int> updateRedacteur(Redacteur redacteur) async {
     final db = await instance.database;
     return await db.update(
       'redacteurs',
       redacteur.toMap(),
       where: 'id = ?',
-      whereArgs: [redacteur.id], // Sécurité pour éviter les injections SQL
+      whereArgs: [redacteur.id],
     );
   }
 
-  // 4. DELETE : Supprimer un rédacteur de la base
+  // Supprimer un rédacteur de la base
   Future<int> deleteRedacteur(int id) async {
     final db = await instance.database;
     return await db.delete('redacteurs', where: 'id = ?', whereArgs: [id]);
